@@ -70,7 +70,10 @@ BTMINER_DATA_LOC = DataLocations(
         ),
         str(DataOptions.WATTAGE): DataFunction(
             "_get_wattage",
-            [RPCAPICommand("rpc_summary", "summary")],
+            [
+                RPCAPICommand("rpc_summary", "summary"),
+                RPCAPICommand("rpc_get_psu", "get_psu"),
+            ],
         ),
         str(DataOptions.WATTAGE_LIMIT): DataFunction(
             "_get_wattage_limit",
@@ -452,16 +455,24 @@ class BTMiner(StockFirmware):
             except LookupError:
                 pass
 
-    async def _get_wattage(self, rpc_summary: dict = None) -> Optional[int]:
+    async def _get_wattage(
+        self, rpc_summary: dict = None, rpc_get_psu: dict = None
+    ) -> Optional[int]:
         if rpc_summary is None:
             try:
                 rpc_summary = await self.rpc.summary()
             except APIError:
                 pass
 
-        if rpc_summary is not None:
+        if rpc_get_psu is None:
             try:
-                wattage = rpc_summary["SUMMARY"][0]["Power"]
+                rpc_get_psu = await self.rpc.get_psu()
+            except APIError:
+                pass
+
+        if rpc_get_psu is not None:
+            try:
+                wattage = int(rpc_get_psu["Msg"]["pin"])
                 return wattage if not wattage == -1 else None
             except LookupError:
                 pass
