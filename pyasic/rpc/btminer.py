@@ -674,7 +674,7 @@ class BTMinerRPCAPI(BaseMinerRPCAPI):
             A reply informing of the status of setting the frequency.
         </details>
         """
-        if not -100 < percent < 100:
+        if not -100 < percent <= 100:
             raise APIError(
                 f"Frequency % is outside of the allowed "
                 f"range.  Please set a % between -100 and "
@@ -777,7 +777,7 @@ class BTMinerRPCAPI(BaseMinerRPCAPI):
         </details>
         """
 
-        if not 0 < percent < 100:
+        if not 0 <= percent <= 100:
             raise APIError(
                 f"Power PCT % is outside of the allowed "
                 f"range.  Please set a % between 0 and "
@@ -839,7 +839,7 @@ class BTMinerRPCAPI(BaseMinerRPCAPI):
         </details>
         """
 
-        if not 0 < percent < 100:
+        if not 0 <= percent <= 100:
             raise APIError(
                 f"Power PCT % is outside of the allowed "
                 f"range.  Please set a % between 0 and "
@@ -917,7 +917,7 @@ class BTMinerRPCAPI(BaseMinerRPCAPI):
             A reply informing of the status of setting upfreq speed.
         </details>
         """
-        if not 0 < upfreq_speed < 9:
+        if not 0 <= upfreq_speed <= 9:
             raise APIError(
                 f"Upfreq speed is outside of the allowed "
                 f"range.  Please set a number between 0 (Normal) and "
